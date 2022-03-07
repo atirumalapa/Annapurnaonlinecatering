@@ -24,6 +24,10 @@ def view_all_users():
 	c.execute('SELECT * FROM usertable')
 	data = c.fetchall()
 	return data
+def get_all_user_name():
+	c.execute('SELECT DISTINCT username FROM usertable')
+	data = c.fetchall()
+	return data
 # Add post function
 # Datae = Date
 def create_posttable():
@@ -131,10 +135,14 @@ def main():
 		new_password = st.text_input("Password", type = "password")
 
 		if st.button("Signup"):
-			create_usertable()
-			add_userdata(new_user,new_password)
-			st.success("You have successfully created a valid Account")
-			st.info("Go to Login Menu to login")
+			usernames = [i[0] for i in get_all_user_name()]
+			if new_user in usernames:
+				st.warning("This username alredy exist")
+			else:
+				create_usertable()
+				add_userdata(new_user,new_password)
+				st.success("You have successfully created a valid Account")
+				st.info("Go to Login Menu to login")
 	elif choice == "Admin login":
 		st.subheader("Admin Login Section")
 		username = st.sidebar.text_input("User Name")
