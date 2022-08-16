@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import sqlite3
+from PIL import Image
 # user data
 conn = sqlite3.connect("data.db")
 c = conn.cursor()
@@ -54,35 +55,6 @@ title_temp = """
 <p style = 'text-align:center;'>{}</p>
 </div>
 """
-# order function
-def create_ordertable():
-	c3.execute('CREATE TABLE IF NOT EXISTS ordertable(Datae DATE,Name TEXT,Phonenumber TEXT,Item TEXT, Quantity TEXT)')
-def add_orderdata(Datae,Name,Phonenumber,Item,Quantity):
-	c3.execute('INSERT INTO ordertable(Datae,Name,Phonenumber,Item,Quantity) VALUES (?,?,?,?,?)',(Datae,Name,Phonenumber,Item,Quantity))
-	conn3.commit()
-def view_all_order():
-	c3.execute('SELECT * FROM ordertable')
-	data = c3.fetchall()
-	return data
-def delete_order_Name(Name):
-	c3.execute('DELETE FROM ordertable WHERE Name="{}"'.format(Name))
-	conn3.commit()
-def get_all_order_Name():
-	c3.execute('SELECT DISTINCT Name FROM ordertable')
-	data = c3.fetchall()
-	return data
-#templates for order
-order_temp = """
-<div style = 'background-color:grey;padding:10px, margin:10px;'>
-<img src = 'https://www.w3schools.com/howto/img_avatar.png' alt = 'Avatar' style = 'vertical-align: middle; float: left; width: 50px; height: 50px; border-radius:50%'>
-<h4 style = 'text-align:left;'>Name = {}</h4>
-<h6 style = 'text-align:left;'>Date = {}</h6>
-<h6 style = 'text-align:left;'>Phone number = {}</h6>
-<h6 style = 'text-align:left;'>Item = {}</h6>
-<h6 style = 'text-align:left;'>Quantity = {}</h6>
-</div>
-"""
-
 # Website function
 def main():
 	st.title("Annapurna online catering")
@@ -113,18 +85,12 @@ def main():
 						b_post = i[1]
 						st.markdown(title_temp.format(b_date, b_post),unsafe_allow_html = True)
 				elif viewer_task == "Order":
-					create_ordertable()
-					st.subheader("Order here")
-					st.write("make different orders for each item so that we can get the quantity right")
-					Date = st.date_input("Date")
-					Name = st.text_input("Name")
-					st.write("type your phone Number like this +1(234)567-8910")
-					Phonenum = st.text_input("Phone Number")
-					Item_name = st.text_input("Item name")
-					quan = st.selectbox("Quantity", ["8 oz","16 oz","32 oz", "1 Costco small tray", "1 Costco big tray"])
-					if st.button("order"):
-						add_orderdata(Date,Name,Phonenum,Item_name,quan)
-						st.success("Your order is sent.")
+					st.write("If you want to order for any special occasions please tell us one week before.",
+						 " And if you want anything on the menu order now.",
+						" Please scan the QR code to place your now.")
+					if st.button("click to order"):
+						chat_image = Image.open('WIN_20220816_12_38_49_Pro.jpg')
+						st.image(chat_image)
 			else:
 				st.warning("Incorrect username/password")
 
